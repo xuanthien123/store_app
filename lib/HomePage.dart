@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_toggle_tab/flutter_toggle_tab.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:provider/provider.dart';
+import 'package:store_app/function/get_grid_view_product.dart';
 import 'package:store_app/provider/product_provider.dart';
 import 'package:store_app/provider/theme_provider.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -28,7 +29,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-
+    final themeProvider =
+    Provider.of<ThemeProvider>(context, listen: false); // get the provider, listen false is necessary cause is in a function
+    _tabIconIndexSelected = themeProvider.idTheme;
     var productProvider = Provider.of<ProductProvider>(context);
     if(genreSelected == "All"){
       productProvider.getList();
@@ -83,178 +86,9 @@ class _HomePageState extends State<HomePage> {
           ),
         ));
 
-    var size = MediaQuery.of(context).size;
-    /*24 is for notification bar on Android*/
-    final double itemHeight = 148 + (size.height - kToolbarHeight - 24) / 4.4;
-    final double itemWidth = size.width / 2;
-    final Shader linearGradient = LinearGradient(
-      colors: <Color>[Colors.amber, Colors.red],
-      begin: Alignment.topCenter,
-      end: Alignment.bottomCenter
-    ).createShader(Rect.fromLTWH(0.0, 0.0, 1.0, 700.0));
+    List<Container> listProduct = GetGridViewProduct().getGrid(context, productProvider.list);
 
-    int productLength = productProvider.list.length;
-    List<Container> listProduct = [];
-    int numberOfProductRow = (productLength)~/2;
-    for(int i=0;i<numberOfProductRow;i++){
-      listProduct.add(Container(
-        margin: EdgeInsets.only(bottom: 15,left: 17),
-        child: Row(
-          children: [
-            Container(
-              margin: EdgeInsets.only(right: 15),
-              width: itemHeight/1.9,
-              height: itemHeight/1.1,
-              padding: EdgeInsets.all(13),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color:
-                (
-                    Theme.of(context).primaryColor
-                ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  InkWell(
-                    onTap: (){
-                      // TODO
-                    },
-                    child: Container(
-                      child: Column(
-                        children: [
-                          Image(image: NetworkImage(productProvider.list[i*2].urlImage??""),height: (size.height - kToolbarHeight - 24) / 5,fit: BoxFit.contain),
-                          SizedBox(height: 10,),
-                          SizedBox(
-                            child: Text(productProvider.list[i*2].nameFactory??"",
-                              style: TextStyle(fontSize: 16,color: Theme.of(context).shadowColor,fontWeight: FontWeight.w500),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
-                            ),
-                            height: 20,
-                          ),
-                          SizedBox(
-                            child: Text(productProvider.list[i*2].nameProduct??"",
-                              style: TextStyle(fontSize: 16,color: Theme.of(context).shadowColor,fontWeight: FontWeight.w500),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
-                              textAlign: TextAlign.center,
-                            ),
-                            height: 35,
-                          ),
-                          SizedBox(height: 5,),
-                          RatingBar.builder(
-                            initialRating: productProvider.list[i*2].rate??0.0,
-                            minRating: 0.1,
-                            direction: Axis.horizontal,
-                            allowHalfRating: true,
-                            itemCount: 5,
-                            itemBuilder: (context, _) => Icon(
-                              Icons.star,
-                              color: Colors.amber,
-                            ),
-                            onRatingUpdate: (rating) {
-                              print(rating);
-                            },
-                            itemSize: 17,
-
-                          ),
-                          Text(formatter.format(productProvider.list[i*2].price??0).toString(),
-                            style: TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                              foreground: Paint()..shader = linearGradient,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-
-                ],
-              ),
-            ),
-            Container(
-              width: itemHeight/1.9,
-              height: itemHeight/1.1,
-              padding: EdgeInsets.all(13),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(20),
-                color:
-                (
-                    Theme.of(context).primaryColor
-                ),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  InkWell(
-                    onTap: (){
-                      // TODO
-                    },
-                    child: Container(
-                      child: Column(
-                        children: [
-                          Image(image: NetworkImage(productProvider.list[i*2+1].urlImage??""),height: (size.height - kToolbarHeight - 24) / 5,fit: BoxFit.contain),
-                          SizedBox(height: 10,),
-                          SizedBox(
-                            child: Text(productProvider.list[i*2+1].nameFactory??"",
-                              style: TextStyle(fontSize: 16,color: Theme.of(context).shadowColor,fontWeight: FontWeight.w500),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
-                            ),
-                            height: 20,
-                          ),
-                          SizedBox(
-                            child: Text(productProvider.list[i*2+1].nameProduct??"",
-                              style: TextStyle(fontSize: 16,color: Theme.of(context).shadowColor,fontWeight: FontWeight.w500),
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2,
-                              textAlign: TextAlign.center,
-                            ),
-                            height: 35,
-                          ),
-                          SizedBox(height: 5,),
-                          RatingBar.builder(
-                            initialRating: productProvider.list[i*2+1].rate??0.0,
-                            minRating: 0.1,
-                            direction: Axis.horizontal,
-                            allowHalfRating: true,
-                            itemCount: 5,
-                            itemBuilder: (context, _) => Icon(
-                              Icons.star,
-                              color: Colors.amber,
-                            ),
-                            onRatingUpdate: (rating) {
-                              print(rating);
-                            },
-                            itemSize: 17,
-
-                          ),
-                          Text(formatter.format(productProvider.list[i*2+1].price??0).toString(),
-                            style: TextStyle(
-                              fontSize: 22,
-                              fontWeight: FontWeight.bold,
-                              foreground: Paint()..shader = linearGradient,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
-
-                ],
-              ),
-            )
-          ],
-        ),
-      ));
-    }
-
-
-    return Scaffold(
-
-      body: SafeArea(
+    return SafeArea(
         child: Container(
           color: Theme.of(context).backgroundColor,
           child: Container(
@@ -289,8 +123,8 @@ class _HomePageState extends State<HomePage> {
                         labels: _listEmpty,
                         icons: _listIconTabToggle,
                         selectedLabelIndex: (index) {
-                          final themeProvider =
-                          Provider.of<ThemeProvider>(context, listen: false); // get the provider, listen false is necessary cause is in a function
+
+
                           setState(() {
                             _tabIconIndexSelected = index;
                             if(_tabIconIndexSelected == 0){
@@ -303,6 +137,7 @@ class _HomePageState extends State<HomePage> {
                           isDarkMode // call the functions
                               ? themeProvider.setDarkmode()
                               : themeProvider.setLightMode();
+                          index = themeProvider.idTheme;
                         },
                         marginSelected:
                         EdgeInsets.symmetric(horizontal: 1, vertical: 1),
@@ -505,7 +340,6 @@ class _HomePageState extends State<HomePage> {
             ),
           ),
         ),
-      ),
     );
   }
 }

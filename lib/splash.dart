@@ -1,9 +1,9 @@
-
 import 'package:animated_splash_screen/animated_splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:store_app/HomePage.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:lottie/lottie.dart';
+import 'package:store_app/navigation_bar.dart';
 class Splash extends StatelessWidget {
   const Splash({Key? key}) : super(key: key);
 
@@ -27,7 +27,7 @@ class Splash extends StatelessWidget {
               splash:
                   Lottie.asset("assets/images/loading.json"),
               backgroundColor: Colors.white,
-              nextScreen: const HomePage(),
+              nextScreen: const NavigationBottomBar(),
               pageTransitionType: PageTransitionType.fade,
             ),
           ],

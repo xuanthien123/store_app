@@ -44,6 +44,8 @@ dependencies:
   flutter_staggered_grid_view:
   flutter_svg:
   intl: ^0.18.0
+  akar_icons_flutter:
+  iconforest_icon_park:
 
 dev_dependencies:
   flutter_test:

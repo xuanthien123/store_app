@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 class ThemeProvider extends ChangeNotifier {
+  int idTheme = 0;
   ThemeData? currentTheme = ThemeData(
     brightness: Brightness.light, // LightMode
     scaffoldBackgroundColor: Color.fromARGB(255, 243, 243, 243),
@@ -23,6 +24,7 @@ class ThemeProvider extends ChangeNotifier {
         fontFamily: 'Karla',
         visualDensity: VisualDensity.adaptivePlatformDensity,// more attributes
     );
+    idTheme = 0;
     notifyListeners();
   }
 
@@ -37,6 +39,7 @@ class ThemeProvider extends ChangeNotifier {
         fontFamily: 'Karla',
         visualDensity: VisualDensity.adaptivePlatformDensity,
     );
+    idTheme = 1;
     notifyListeners();
   }
 }
