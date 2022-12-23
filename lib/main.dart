@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:store_app/provider/product_provider.dart';
+import 'package:store_app/provider/search_product_provider.dart';
 import 'package:store_app/splash.dart';
 
 import 'provider/theme_provider.dart';
@@ -11,8 +12,9 @@ void main() {
       providers: [
         ChangeNotifierProvider(create: (_) => ProductProvider()),
         ChangeNotifierProvider(create: (_) => ThemeProvider()),
+        ChangeNotifierProvider(create: (_) => SearchProductProvider()),
       ],
-      child: MyApp()
+      child: const MyApp()
     )
   );
 }

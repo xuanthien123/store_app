@@ -7,6 +7,7 @@ import 'package:store_app/provider/product_provider.dart';
 import 'package:store_app/provider/theme_provider.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import "package:intl/intl.dart";
+import 'package:store_app/search_product.dart';
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -34,10 +35,10 @@ class _HomePageState extends State<HomePage> {
     _tabIconIndexSelected = themeProvider.idTheme;
     var productProvider = Provider.of<ProductProvider>(context);
     if(genreSelected == "All"){
-      productProvider.getList();
+      productProvider.getList("");
     }
     else{
-      productProvider.getListBrand(genreSelected);
+      productProvider.getListBrand(genreSelected,"");
     }
 
       _listBanner.add(
@@ -86,7 +87,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ));
 
-    List<Container> listProduct = GetGridViewProduct().getGrid(context, productProvider.list);
+    List<Container> listProduct = GetGridViewProduct.getGrid(context, productProvider.list);
 
     return SafeArea(
         child: Container(
@@ -164,13 +165,21 @@ class _HomePageState extends State<HomePage> {
                             color: Theme.of(context).primaryColor,
                             borderRadius: BorderRadius.all(Radius.circular(10))
                         ),
-                        child: TextField(
+                        child: TextFormField(
                           decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintText: "Typing at here",
-                              icon: Image.asset("assets/images/search_icon.png")
+                            border: InputBorder.none,
+                            hintText: "Typing at here",
+                            icon: Image.asset("assets/images/search_icon.png"),
                           ),
-                        autofocus: false,
+                          autofocus: false,
+                          onFieldSubmitted: (item) {
+                            /// Using default Navigator from Scaffold, *push* onto stack SecondPage
+                            Navigator.of(context).push(
+                                MaterialPageRoute(
+                                    builder: (context) => SearchProduct(searchingKey: item,)
+                                )
+                            );
+                          },
 
                       ),
                     ),

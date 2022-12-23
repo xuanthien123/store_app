@@ -5,7 +5,7 @@ import 'package:intl/intl.dart';
 import '../model/product_model.dart';
 
 class GetGridViewProduct {
-  List<Container> getGrid(BuildContext context,List<ProductModel> list){
+  static List<Container> getGrid(BuildContext context,List<ProductModel> list){
     var size = MediaQuery.of(context).size;
     /*24 is for notification bar on Android*/
     final double itemHeight = 148 + (size.height - kToolbarHeight - 24) / 4.4;
