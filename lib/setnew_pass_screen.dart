@@ -9,32 +9,28 @@ class SetNewPassScreen extends StatefulWidget {
 }
 
 class _SetNewPassScreenState extends State<SetNewPassScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _password = TextEditingController();
+  final TextEditingController _confirmPassword = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.grey[100],
         body: Column(
           children: [
             Container(
+              margin: const EdgeInsets.all(20),
               width: double.infinity,
               // height: MediaQuery.of(context).size.height / 3.5,
               child: Image.asset('assets/images/LogoApp.png', width: 300, height: 300),
             ),
             Expanded(
               child: Container(
-                width: double.infinity,
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30),
-                  ),
-                ),
-
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: SingleChildScrollView(
+                margin: const EdgeInsets.all(30),
+                child: SingleChildScrollView(
+                  child: Form(
+                    key: _formKey,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -46,20 +42,23 @@ class _SetNewPassScreenState extends State<SetNewPassScreen> {
                             fontWeight: FontWeight.bold,
                           ),
                         ),
+                        const SizedBox(height: 10),
+                        const Text(
+                          "Your new password must ne different to previously used password",
+                          style: TextStyle(
+                            color: Colors.black,
 
-                        const SizedBox(height: 15),
-                        Container(
-                          child: Text(
-                            "Your new password must ne different to peviously used password",
-                            style: TextStyle(
-                              color: Colors.black,
-                            ),
                           ),
                         ),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 30),
                         Container(
-                          child: const TextField(
-                            style: TextStyle(color: Colors.black),
+                          child: TextFormField(
+                            controller: _password,
+                            validator: (value){
+                              if (value == null || value.isEmpty)
+                                return "Vui lòng nhập mật khẩu";
+                              return null;
+                            },
                             decoration: InputDecoration(
                               border: UnderlineInputBorder(),
                               prefixIcon: Icon(
@@ -71,10 +70,16 @@ class _SetNewPassScreenState extends State<SetNewPassScreen> {
                             ),
                           ),
                         ),
+
                         const SizedBox(height: 10),
                         Container(
-                          child: const TextField(
-                            style: TextStyle(color: Colors.black),
+                          child: TextFormField(
+                            controller: _confirmPassword,
+                            validator: (value){
+                              if (value == null || value.isEmpty)
+                                return "Vui lòng nhập lại mật khẩu";
+                              return null;
+                            },
                             decoration: InputDecoration(
                               border: UnderlineInputBorder(),
                               prefixIcon: Icon(
@@ -86,13 +91,13 @@ class _SetNewPassScreenState extends State<SetNewPassScreen> {
                             ),
                           ),
                         ),
-                        const SizedBox(height: 30),
+                        const SizedBox(height: 20),
                         GestureDetector(
                           onTap: () {},
                           child: Container(
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(30),
-                              color: Colors.orange,
+                              borderRadius: BorderRadius.circular(15),
+                              color: const Color.fromARGB(255, 244, 76, 15),
                             ),
                             child: const Center(
                               child: Padding(
@@ -109,6 +114,8 @@ class _SetNewPassScreenState extends State<SetNewPassScreen> {
                             ),
                           ),
                         ),
+                        const SizedBox(height: 10),
+
                       ],
                     ),
                   ),

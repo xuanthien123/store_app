@@ -4,7 +4,7 @@ class ThemeProvider extends ChangeNotifier {
   int idTheme = 0;
   ThemeData? currentTheme = ThemeData(
     brightness: Brightness.light, // LightMode
-    scaffoldBackgroundColor: Color.fromARGB(255, 243, 243, 243),
+    scaffoldBackgroundColor: Colors.white,
     primarySwatch: Colors.blue,
     primaryColor: Colors.white,
     backgroundColor: Colors.grey[100],
@@ -16,7 +16,7 @@ class ThemeProvider extends ChangeNotifier {
   setLightMode() {
     currentTheme = ThemeData(
         brightness: Brightness.light, // LightMode
-        scaffoldBackgroundColor: Color.fromARGB(255, 243, 243, 243),
+        scaffoldBackgroundColor: Colors.white,
         primarySwatch: Colors.blue,
         primaryColor: Colors.white,
         backgroundColor: Colors.grey[100],
@@ -31,7 +31,7 @@ class ThemeProvider extends ChangeNotifier {
   setDarkmode() {
     currentTheme = ThemeData(
         brightness: Brightness.dark, // DarkMode
-        scaffoldBackgroundColor: Colors.black54,
+        scaffoldBackgroundColor: Colors.black,
         primarySwatch: Colors.blue,
         primaryColor: Colors.grey[800],
         backgroundColor: Colors.grey[900],

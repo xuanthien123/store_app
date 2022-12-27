@@ -9,129 +9,184 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignupScreenState extends State<SignUpScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _userName = TextEditingController();
+  final TextEditingController _password = TextEditingController();
+  final TextEditingController _confirmPassword = TextEditingController();
+  final TextEditingController _email = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Theme.of(context).backgroundColor,
         body: Column(
           children: [
             Container(
+              margin: const EdgeInsets.all(20),
               width: double.infinity,
               // height: MediaQuery.of(context).size.height / 3.5,
               child: Image.asset('assets/images/LogoApp.png', width: 300, height: 300),
             ),
             Expanded(
               child: Container(
-                width: double.infinity,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: const BorderRadius.only(
-                    topLeft: Radius.circular(30),
-                    topRight: Radius.circular(30),
-                  ),
-                ),
-
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
-                  child: SingleChildScrollView(
+                margin: const EdgeInsets.all(20),
+                child: SingleChildScrollView(
+                  child: Form(
+                    key: _formKey,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         const Text(
                           'Sign up',
                           style: TextStyle(
-                            color: Colors.black,
                             fontSize: 40,
                             fontWeight: FontWeight.bold,
                           ),
                         ),
 
-                        const SizedBox(height: 10),
                         Container(
-                          child: const TextField(
-                            style: TextStyle(color: Colors.white),
+                          child: TextFormField(
+                            controller: _email,
+                            validator: (value){
+                              if (value == null || value.isEmpty)
+                                return "Vui lòng nhập email";
+                              return null;
+                            },
                             decoration: InputDecoration(
                               border: UnderlineInputBorder(),
                               prefixIcon: Icon(
                                 Icons.email,
-                                color: Colors.black,
                               ),
                               hintText: 'Email',
-                              hintStyle: TextStyle(color: Colors.black),
+                              hintStyle: TextStyle(),
                             ),
                           ),
                         ),
 
 
-                        const SizedBox(height: 10),
                         Container(
-                          child: const TextField(
-                            style: TextStyle(color: Colors.black),
+                          child: TextFormField(
+                            obscureText: true,
+                            enableSuggestions: false,
+                            autocorrect: false,
+                            controller: _password,
+                            validator: (value){
+                              if (value == null || value.isEmpty)
+                                return "Vui lòng nhập mật khẩu";
+                              return null;
+                            },
                             decoration: InputDecoration(
                               border: UnderlineInputBorder(),
                               prefixIcon: Icon(
                                 Icons.lock,
-                                color: Colors.black,
                               ),
                               hintText: 'Password',
-                              hintStyle: TextStyle(color: Colors.black),
+                              hintStyle: TextStyle(),
                             ),
                           ),
                         ),
-                        const SizedBox(height: 10),
                         Container(
-                          child: const TextField(
-                            style: TextStyle(color: Colors.black),
+                          child: TextFormField(
+                            obscureText: true,
+                            enableSuggestions: false,
+                            autocorrect: false,
+                            controller: _confirmPassword,
+                            validator: (value){
+                              if (value == null || value.isEmpty)
+                                return "Vui lòng nhập lại mật khẩu";
+                              return null;
+                            },
                             decoration: InputDecoration(
                               border: UnderlineInputBorder(),
                               prefixIcon: Icon(
                                 Icons.lock,
-                                color: Colors.black,
                               ),
                               hintText: 'Confirm Password',
-                              hintStyle: TextStyle(color: Colors.black),
+                              hintStyle: TextStyle(),
                             ),
                           ),
                         ),
-                        const SizedBox(height: 10),
                         Container(
-                          child: const TextField(
-                            style: TextStyle(color: Colors.black),
+                          child: TextFormField(
+                            obscureText: true,
+                            enableSuggestions: false,
+                            autocorrect: false,
+                            controller: _userName,
+                            validator: (value){
+                              if (value == null || value.isEmpty)
+                                return "Vui lòng nhập tên tài khoản";
+                              return null;
+                            },
                             decoration: InputDecoration(
                               border: UnderlineInputBorder(),
                               prefixIcon: Icon(
                                 Icons.person,
-                                color: Colors.black,
                               ),
                               hintText: 'User Name',
-                              hintStyle: TextStyle(color: Colors.black),
+                              hintStyle: TextStyle(),
                             ),
                           ),
                         ),
-                        Container(
-                            margin: EdgeInsets.fromLTRB(0, 10,0,0),
-                            child: Align (
-                                alignment: Alignment.center,
-                                child: TextButton  (
-                                    child: Text("By Signing up, you are agree to out Terms & Conditions and Privacy Plicy",
-                                      style: TextStyle(
-                                        color: Colors.orange,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                        Align (
+                              alignment: Alignment.center,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    "By Signing up, you are agree to out",
+                                    style: TextStyle(
+                                      fontSize: 13,
                                     ),
-                                    onPressed: () {}
-                                )
+                                  ),
+                                  TextButton  (
+                                      child: Text("Terms & Conditions",
+                                        style: TextStyle(
+                                          fontSize: 13,
+                                          color: const Color.fromARGB(255, 244, 76, 15),
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      onPressed: () {}
+                                  ),
+                                ],
+                              ),
+
+                            ),
+                        Container(
+                            child: Align (
+                              alignment: Alignment.topLeft,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.start,
+                                children: [
+                                  Text("and",
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                    ),
+                                  ),
+                                  TextButton  (
+                                      child: Text("Privacy Plicy",
+                                        style: TextStyle(
+                                          color: const Color.fromARGB(255, 244, 76, 15),
+                                          fontWeight: FontWeight.bold,
+                                          fontSize: 13,
+                                        ),
+                                      ),
+                                      onPressed: () {}
+                                  ),
+                                ],
+
+                              ),
+
                             )
                         ),
-
                         const SizedBox(height: 20),
                         GestureDetector(
                           onTap: () {},
                           child: Container(
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(30),
-                              color: Colors.orange,
+                              borderRadius: BorderRadius.circular(15),
+                              color: const Color.fromARGB(255, 244, 76, 15),
                             ),
                             child: const Center(
                               child: Padding(
@@ -152,18 +207,32 @@ class _SignupScreenState extends State<SignUpScreen> {
                         Container(
                             margin: EdgeInsets.fromLTRB(0, 10,0,0),
                             child: Align (
-                                alignment: Alignment.center,
-                                child: TextButton  (
-                                    child: Text("Joned us before? Login",
-                                      style: TextStyle(
-                                        color: Colors.orange,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                              alignment: Alignment.center,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "Joned us before?",
+                                    style: TextStyle(
+                                      fontSize: 13,
                                     ),
-                                    onPressed: () {}
-                                )
+                                  ),
+                                  TextButton  (
+                                      child: Text("Login",
+                                        style: TextStyle(
+                                          fontSize: 13,
+                                          color: const Color.fromARGB(255, 244, 76, 15),
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      onPressed: () {}
+                                  ),
+                                ],
+                              ),
+
                             )
                         ),
+
                       ],
                     ),
                   ),

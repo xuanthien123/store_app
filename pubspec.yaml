@@ -46,6 +46,8 @@ dependencies:
   intl: ^0.18.0
   akar_icons_flutter:
   iconforest_icon_park:
+  comment_box: ^0.0.18
+  shared_preferences: ^2.0.15
 
 dev_dependencies:
   flutter_test:

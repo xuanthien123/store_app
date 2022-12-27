@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 
 class SearchProductProvider extends ChangeNotifier {
   List<ProductModel> list = [];
-  void getList(String data,String sort) async {
+  Future<int> getList1(String data,String sort) async {
     String apiURL = "https://flutterserverdemo20221204094255.azurewebsites.net/api/Product/getproducts/" + data;
     var client = http.Client();
     var jsonString = await client.get(Uri.parse(apiURL));
@@ -24,17 +24,26 @@ class SearchProductProvider extends ChangeNotifier {
       sortProductFromHighToLow();
     }
     notifyListeners();
+    print(2);
+    return 1;
   }
 
+
   void getListBrand(String data, String searchKey, String sort) async {
-    getList(searchKey, sort);
+    await getList1(searchKey, sort);
+
+    if(data == "All"){
+      return;
+    }
     List<ProductModel> temp = [];
+
     for(var i in list){
       if(i.nameFactory == data){
         temp.add(i);
       }
     }
     list = temp;
+    print(3);
   }
 
   int mySortComparisonAToZ(ProductModel a, ProductModel b) {

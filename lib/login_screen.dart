@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:store_app/forgot_pass_screen.dart';
+import 'package:store_app/provider/user_provider.dart';
+import 'package:store_app/signup_screen.dart';
 
 
 class LoginScreen extends StatefulWidget {
@@ -12,8 +16,10 @@ class _LoginScreenState extends State<LoginScreen> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _userName = TextEditingController();
   final TextEditingController _password = TextEditingController();
+  bool wrongPassword = false;
   @override
   Widget build(BuildContext context) {
+    var userProvider = Provider.of<UserProvider>(context);
     return SafeArea(
       child: Scaffold(
         backgroundColor: Theme.of(context).backgroundColor,
@@ -48,7 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               controller: _userName,
                               validator: (value){
                                 if (value == null || value.isEmpty)
-                                  return "Vui lòng nhập tên dăng nhập";
+                                  return "Vui lòng nhập email đăng nhập";
                                 return null;
                               },
                               decoration: InputDecoration(
@@ -72,6 +78,8 @@ class _LoginScreenState extends State<LoginScreen> {
                               validator: (value){
                                 if (value == null || value.isEmpty)
                                   return "Vui lòng nhập mật khẩu";
+                                if (wrongPassword == true)
+                                  return "Tài khoản hoặc mật khẩu không chính xác";
                                 return null;
                               },
                               decoration: InputDecoration(
@@ -95,15 +103,51 @@ class _LoginScreenState extends State<LoginScreen> {
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      onPressed: () {}
+                                      onPressed: () {
+                                        Navigator.push(
+                                            context,
+                                            MaterialPageRoute(builder: (context) => const ForgotPassScreen())
+                                        );
+                                      }
                                   )
                               )
                           ),
 
                           const SizedBox(height: 20),
-                          GestureDetector(
-                            onTap: () {},
+                          InkWell(
+                            onTap: () async {
+                              wrongPassword = false;
+                              if (_formKey.currentState!.validate()){
+                                showDialog(
+                                    context: context,
+                                    builder: (BuildContext context) {
+                                      return Container(
+                                        alignment: Alignment.center,
+                                        margin: const EdgeInsets.only(left: 120,right: 120,top: 312,bottom: 312),
+                                          decoration: BoxDecoration(
+                                            borderRadius: BorderRadius.circular(15),
+                                            color: Theme.of(context).backgroundColor,
+                                          ),
+                                        child: const Center(child: CircularProgressIndicator())
+                                      );
+                                    });
+                                int a = await userProvider.loginUser(_userName.text, _password.text);
+                                Navigator.pop(context);
+                                if(a == 0){
+                                  wrongPassword = true;
+                                  _formKey.currentState!.validate();
+                                }
+                                else{
+                                  wrongPassword = false;
+                                }
+                              }
+
+                              if(userProvider.user.email != null){
+                                Navigator.pop(context);
+                              }
+                            },
                             child: Container(
+                              height: 50,
                               decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(15),
                                 color: const Color.fromARGB(255, 244, 76, 15),
@@ -115,7 +159,7 @@ class _LoginScreenState extends State<LoginScreen> {
                                     'Login',
                                     style: TextStyle(
                                       color: Colors.white,
-                                      fontSize: 30,
+                                      fontSize: 20,
                                       fontWeight: FontWeight.w500,
                                     ),
                                   ),
@@ -141,7 +185,12 @@ class _LoginScreenState extends State<LoginScreen> {
                                               fontWeight: FontWeight.bold,
                                             ),
                                           ),
-                                          onPressed: () {}
+                                          onPressed: () {
+                                            Navigator.push(
+                                                context,
+                                                MaterialPageRoute(builder: (context) => const SignUpScreen())
+                                            );
+                                          }
                                       ),
                                     ],
                                   )

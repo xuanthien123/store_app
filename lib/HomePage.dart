@@ -5,9 +5,10 @@ import 'package:provider/provider.dart';
 import 'package:store_app/function/get_grid_view_product.dart';
 import 'package:store_app/provider/product_provider.dart';
 import 'package:store_app/provider/theme_provider.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import "package:intl/intl.dart";
 import 'package:store_app/search_product.dart';
+
+import 'my_cart.dart';
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
 
@@ -16,7 +17,9 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  bool setBranch = true;
   bool isDarkMode = false;
+  bool isLoading = false;
   var _tabIconIndexSelected = 0;
   var _listEmpty = ["", ""];
   var _listIconTabToggle = [
@@ -30,15 +33,15 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    print(1);
     final themeProvider =
     Provider.of<ThemeProvider>(context, listen: false); // get the provider, listen false is necessary cause is in a function
     _tabIconIndexSelected = themeProvider.idTheme;
     var productProvider = Provider.of<ProductProvider>(context);
-    if(genreSelected == "All"){
-      productProvider.getList("");
-    }
-    else{
-      productProvider.getListBrand(genreSelected,"");
+    if(setBranch == true){
+      productProvider.getListBrand("All", "");
+      print("1");
+      setBranch = false;
     }
 
       _listBanner.add(
@@ -86,8 +89,20 @@ class _HomePageState extends State<HomePage> {
 
           ),
         ));
+    List<Container> listProduct = [];
+    if(productProvider.list != []){
+      listProduct = GetGridViewProduct.getGrid(context, productProvider.list);
+    }
+    else {
+      listProduct = [
+        Container(
+          color: Colors.red,
+            child: const Center(child: CircularProgressIndicator())
+        )
+      ];
+    }
 
-    List<Container> listProduct = GetGridViewProduct.getGrid(context, productProvider.list);
+
 
     return SafeArea(
         child: Container(
@@ -124,8 +139,6 @@ class _HomePageState extends State<HomePage> {
                         labels: _listEmpty,
                         icons: _listIconTabToggle,
                         selectedLabelIndex: (index) {
-
-
                           setState(() {
                             _tabIconIndexSelected = index;
                             if(_tabIconIndexSelected == 0){
@@ -185,7 +198,12 @@ class _HomePageState extends State<HomePage> {
                     ),
                       Container(
                         child: InkWell(
-                          onTap: (){},
+                          onTap: (){
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => const MyCart())
+                            );
+                          },
                           child: Icon(
                             Icons.shopping_bag_outlined,
                           ),
@@ -222,10 +240,13 @@ class _HomePageState extends State<HomePage> {
                                 children: [
                                   ..._brand.map((String e) {
                                     return InkWell(
-                                      onTap: (){
+                                      onTap: () async{
+                                        productProvider.list = [];
                                         setState(() {
                                           genreSelected = e;
+                                          isLoading = true;
                                         });
+                                          productProvider.getListBrand(genreSelected,"");
                                       },
                                       child: Container(
                                         margin: EdgeInsets.only(left: 3,right: 3),

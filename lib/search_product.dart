@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:store_app/model/product_model.dart';
 import 'package:store_app/provider/search_product_provider.dart';
 
 import 'function/get_grid_view_product.dart';
@@ -7,17 +8,20 @@ class SearchProduct extends StatefulWidget {
   final String searchingKey;
   const SearchProduct({
     required this.searchingKey, Key? key
-}) : super(key: key);
+  }) : super(key: key);
 
   @override
   State<SearchProduct> createState() => _SearchProductState();
 }
 List<String> softList = <String>['Newest', 'A-Z', 'Low to high', 'High to low'];
-List<String> brandList = <String>["All", "Apple", "Samsung", "Xiaomi","Oppo", "Vivo", "Sony","Lenovo"];
+List<String> brandList1 = <String>["All", "Apple", "Samsung", "Xiaomi","Oppo", "Vivo", "Sony","Lenovo"];
+
 class _SearchProductState extends State<SearchProduct> {
   late TextEditingController _search;
+  bool setBranch = true;
   String dropdownSoftValue = softList.first;
-  String dropdownBrandValue = brandList.first;
+  String dropdownBrandValue = brandList1.first;
+  List<ProductModel> list1 = [];
 
   @override
   void initState() {
@@ -26,14 +30,16 @@ class _SearchProductState extends State<SearchProduct> {
   }
   @override
   Widget build(BuildContext context) {
+    print(4);
     var productProvider = Provider.of<SearchProductProvider>(context);
-    if(dropdownBrandValue == "All"){
-      productProvider.getList(_search.text,dropdownSoftValue);
+    if(setBranch == true){
+      productProvider.getListBrand(dropdownBrandValue, _search.text, dropdownSoftValue);
+      print("1");
+      setBranch = false;
     }
-    else{
-      productProvider.getListBrand(dropdownBrandValue,_search.text,dropdownSoftValue);
-    }
-    List<Container> listSearchProduct = GetGridViewProduct.getGrid(context, productProvider.list);
+    list1 = productProvider.list;
+    List<Container> listSearchProduct = GetGridViewProduct.getGrid(context, list1);
+    print(5);
     return Scaffold(
       body: SafeArea(
         child: Container(
@@ -67,6 +73,9 @@ class _SearchProductState extends State<SearchProduct> {
                           setState(() {
                             _search.text = value;
                           });
+
+                          productProvider.getListBrand(dropdownBrandValue,_search.text,dropdownSoftValue);
+
                         },
 
                       ),
@@ -85,17 +94,23 @@ class _SearchProductState extends State<SearchProduct> {
                 child: Row(
                   children: [
                     const Text(
-                      "Soft by:   "
+                        "Soft by:   "
                     ),
                     DropdownButton(
                       value: dropdownSoftValue,
                       icon: const Icon(Icons.keyboard_arrow_down),
                       elevation: 5,
-                      onChanged: (String? value) {
+                      onChanged: (String? value) async {
                         // This is called when the user selects an item.
+
                         setState(() {
                           dropdownSoftValue = value!;
+
                         });
+                        productProvider.getListBrand(dropdownBrandValue,_search.text,dropdownSoftValue);
+
+
+
                       },
                       items: softList.map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
@@ -113,11 +128,13 @@ class _SearchProductState extends State<SearchProduct> {
                       elevation: 5,
                       onChanged: (String? value) {
                         // This is called when the user selects an item.
-                        setState(() {
+                        setState((){
                           dropdownBrandValue = value!;
+                          setBranch = true;
                         });
+
                       },
-                      items: brandList.map<DropdownMenuItem<String>>((String value) {
+                      items: brandList1.map<DropdownMenuItem<String>>((String value) {
                         return DropdownMenuItem<String>(
                           value: value,
                           child: Text(value),

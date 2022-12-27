@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:store_app/login_screen.dart';
 import 'package:store_app/processd_checkout.dart';
+import 'package:store_app/provider/search_product_provider.dart';
 
 import 'detail_order.dart';
+import 'function/get_grid_view_product.dart';
 class MyFavorite extends StatefulWidget {
   const MyFavorite({Key? key}) : super(key: key);
 
@@ -11,8 +14,16 @@ class MyFavorite extends StatefulWidget {
 }
 
 class _MyFavoriteState extends State<MyFavorite> {
+  bool isStart = true;
   @override
   Widget build(BuildContext context) {
+  var productProvider = Provider.of<SearchProductProvider>(context);
+  if(isStart){
+    productProvider.getListBrand("Apple","","Newest");
+    isStart = false;
+  }
+  var list1 = productProvider.list;
+  List<Container> listSearchProduct = GetGridViewProduct.getGrid(context, list1);
     return SafeArea(
       child: Container(
         color: Theme.of(context).backgroundColor,
@@ -71,6 +82,15 @@ class _MyFavoriteState extends State<MyFavorite> {
                 ],
               ),
             ),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    ...listSearchProduct
+                  ],
+                ),
+              ),
+            )
           ],
         ),
       ),
