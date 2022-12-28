@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:provider/provider.dart';
+import 'package:store_app/provider/user_provider.dart';
 import '../screen/components/body.dart';
 import '../screen/components/custom_app_bar.dart';
 import 'model/cartRequestResponse_Model.dart';
@@ -15,6 +17,7 @@ class DetailScreen extends StatefulWidget {
   State<DetailScreen> createState() => _DetailScreenState();
 }
 class _DetailScreenState extends State<DetailScreen> {
+
   @override
   void initState() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
@@ -26,7 +29,7 @@ class _DetailScreenState extends State<DetailScreen> {
   }
   @override
   Widget build(BuildContext context) {
-    print(widget.id.toString() + "alo alo");
+
     return Scaffold(
       backgroundColor: Color(0xFFF5F6F9),
       appBar: PreferredSize(
@@ -36,8 +39,8 @@ class _DetailScreenState extends State<DetailScreen> {
       body: Body(data : tam1! ),
     );
   }
-  void asyncMethod(BuildContext context) async {
-    print(widget.id);
+  void asyncMethod(BuildContext context,) async {
+
     var check=await checktam.fetchData(widget.id, context);
     setState(() {
       tam1=check;
@@ -62,14 +65,16 @@ class checktam{
       List<detailproductresponse> list=[];
       if(response.statusCode == 200){
         Map<String, dynamic> map = json.decode(response.body);
-        print(response.body);
+
+
         // dynamic data = map['product'];
         // print(map);
         //print(data);
         var value=  detailproductresponse.fromJson(map);
+        print("success");
         //var globalvar=value;
         globalvar=value;
-         print(value.product.nameProduct);
+
 /*      var newListObject= jsonObject as List;
       List<dynamic> data = jsonObject[0];*/
 
@@ -90,7 +95,7 @@ class checktam{
         return  tam;
       }
     }catch(e){
-      print(e.toString());
+
     }
     return tam;
   }

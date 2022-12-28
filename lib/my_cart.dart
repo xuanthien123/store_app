@@ -2,6 +2,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:provider/provider.dart';
+import 'package:store_app/function/for_ui.dart';
+import 'package:store_app/provider/cartProvider.dart';
+import 'package:store_app/provider/user_provider.dart';
+
+import 'model/cartModels.dart';
 
 class MyCart extends StatefulWidget {
   const MyCart({Key? key}) : super(key: key);
@@ -10,25 +16,43 @@ class MyCart extends StatefulWidget {
   State<MyCart> createState() => _MyCartState();
 }
 
+List<Cart> data=[];
 class _MyCartState extends State<MyCart> {
   @override
-  Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        backgroundColor: Theme.of(context).backgroundColor,
-        body: Column(children: [
-          blockTi(),
-          blockItems(),
-          blockProduct(),
-          blockProduct(),
-          blockPromoCodes(),
-          blockCodes(),
-          const SizedBox(height: 200,),
-          blockTotalButton()
-        ]),
-      ),
+ /* void initState() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      asyncMethod(context);
+    });
+    // TODO: implement initState
+    super.initState(
     );
+  }*/
+  @override
+  Widget build(BuildContext context) {
+var userProvider = Provider.of<UserProvider>(context);
+asyncMethod(context, userProvider.user.idUser!);
+    return
+      Scaffold(
+        backgroundColor: ForUI.hexToColor("#F3F3F3"),
+        body: SingleChildScrollView(
+              child: Column(
+                  children: [
+                blockTi(),
+                blockItems(),
+               ...List.generate( data.length,
+                      (index) =>   blockProduct(index),  ),
+                blockPromoCodes(),
+                blockCodes(),
+                const SizedBox(height: 20,),
+                blockTotalButton()
+              ]),
+        ),
+      );
+
   }
+/*  int SumTotal(List<Cart>){
+
+  }*/
   //block
   blockTi(){
     return Container(
@@ -36,10 +60,18 @@ class _MyCartState extends State<MyCart> {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          Icon(Icons.arrow_back),
+          InkWell(
+            onTap: (){
+              Navigator.pop(context);
+            },
+            child: Icon(
+              Icons.arrow_back,
+            ),
+          ),
           Text("My Cart",
             style: TextStyle(
               fontSize: 20,
+              color: Colors.black,
 
             ),
 
@@ -56,6 +88,13 @@ class _MyCartState extends State<MyCart> {
       ),
     );
   }
+
+  void asyncMethod(BuildContext context,int index) async {
+    var check=await checkData.fetchData(index);
+    setState(() {
+      data=check;
+    });
+  }
   blockItems(){
     return Container(
       margin: EdgeInsets.all(10),
@@ -65,7 +104,7 @@ class _MyCartState extends State<MyCart> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children:[
-              Image.asset('assets/images/items.png', width: 24, height: 24,),
+              Image.asset('images/items.png', width: 24, height: 24,),
 
             ],
           ),
@@ -89,8 +128,15 @@ class _MyCartState extends State<MyCart> {
       ),
     );
   }
+  double sumtotal(List<Cart> list){
+    double sum=0;
+    for(int i=0; i<list.length;i++){
+      sum=double.parse(list[i].quantity.toString())*list[i].price;
+    }
+    return sum;
+  }
+  blockProduct(int index){
 
-  blockProduct(){
     return Container(
       decoration: new BoxDecoration(
         color: Colors.white,
@@ -105,7 +151,7 @@ class _MyCartState extends State<MyCart> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children:[
-                Image.asset('assets/images/iphone.png', width: 75, height: 75,),
+                Image.network(data[index].urlImage.toString(), width: 75, height: 75,),
 
               ],
             ),
@@ -115,30 +161,34 @@ class _MyCartState extends State<MyCart> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text("iPhone 14 Pro Max",
+
+                Text(data[index].nameProduct, maxLines: 2,
+
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    fontSize: 15,
+                    fontSize: 12,
                     color: Colors.black,
                   ),
                 ),
-                Text("6GB - 128GB, Gray",
+                Text(data[index].specificationProduct+"-"+data[index].colorName,
                   style: TextStyle(
                     fontSize: 10,
                     color: Colors.grey,
 
                   ),
                 ),
-                Text("999",
+                Text(data[index].price.toString(),
                   style: TextStyle(
                     fontSize: 20,
                     color: Color.fromARGB(255, 255, 81, 0),
                   ),
                 )
+
               ],
             ),
-          ),
+          ),Spacer(),
           Padding(
-            padding: const EdgeInsets.only(left: 12),
+            padding: const EdgeInsets.only(right: 2),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.end,
               children: [
@@ -153,9 +203,10 @@ class _MyCartState extends State<MyCart> {
                         elevation: 0.0,
                         shadowColor: Colors.white,
                       ),
-
-                      onPressed: () {},
-                      child: Image.asset('assets/images/delete.png', width: 20, height: 20,
+                      onPressed: () {
+                        print("alo ao");
+                      },
+                      child: Image.asset('images/delete.png', width: 20, height: 20,
                       ),
                     ),
                   ),
@@ -171,20 +222,20 @@ class _MyCartState extends State<MyCart> {
                     children: [
                       Container(
                         width: 30,
-                        child: Padding(
-                          padding: const EdgeInsets.only(left:00.0),
-                          child: ElevatedButton(
-                            style: TextButton.styleFrom(backgroundColor:  Color.fromARGB(255, 255, 81, 0), elevation: 0.0, shadowColor: Colors.white,
-                            ),
-                            onPressed: () {},
-                            child: Text("-", style: TextStyle(color: Colors.white, ),
-                            ),
+                        height: 20,
+
+                        child:ElevatedButton(
+                          style: TextButton.styleFrom(backgroundColor:  Color.fromARGB(255, 255, 81, 0), elevation: 0.0, shadowColor: Colors.white, ),
+                          onPressed: (){},  child: Center(
+                          child: Text("-", style: TextStyle(color: Colors.white),
                           ),
                         ),
-                      ),
+                          //Text("-", style: TextStyle(color: Colors.white, ),),
+                        ),),
+
                       Padding(
                         padding: const EdgeInsets.all(8.0),
-                        child: Text("1",
+                        child: Text(data[index].quantity.toString(),
                           style: TextStyle(
                             fontSize: 20,
                             color: Colors.white,
@@ -193,20 +244,19 @@ class _MyCartState extends State<MyCart> {
                       ),
                       Container(
                         width: 30,
-                        child: Center(
-                          child: Padding(
-                            padding: const EdgeInsets.only(right:0.0),
-                            child: ElevatedButton(
 
-                              style: TextButton.styleFrom(backgroundColor:  Color.fromARGB(255, 255, 81, 0), elevation: 0.0, shadowColor: Colors.white, ),
-                              onPressed: () {},
-                              child: Center(
-                                child: Text("+", style: TextStyle(color: Colors.white),
-                                ),
+                        child: Padding(
+                          padding: const EdgeInsets.only(right:0.0),
+                          child: ElevatedButton(
+                            style: TextButton.styleFrom(backgroundColor:  Color.fromARGB(255, 255, 81, 0), elevation: 0.0, shadowColor: Colors.white, ),
+                            onPressed: () {},
+                            child: Center(
+                              child: Text("+", style: TextStyle(color: Colors.white),
                               ),
                             ),
                           ),
                         ),
+
                       ),
                     ],
                   ),
@@ -228,8 +278,7 @@ class _MyCartState extends State<MyCart> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children:[
-              Image.asset('assets/images/promo_code.png', width: 24, height: 24,),
-
+              Image.asset('images/promo_code.png', width: 24, height: 24,),
             ],
           ),
           Row(
@@ -301,7 +350,7 @@ class _MyCartState extends State<MyCart> {
     );
   }
   blockTotalButton(){
-    return Expanded(child: Container(
+    return  Container(
       width: double.infinity,
       decoration: BoxDecoration(
 
@@ -313,9 +362,8 @@ class _MyCartState extends State<MyCart> {
 
       child: Padding(
         padding: const EdgeInsets.all(00.0),
-        child: SingleChildScrollView(
             child: Container(
-              height: 200,
+              height: 150,
               decoration: BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.all(Radius.circular(10))
@@ -339,7 +387,7 @@ class _MyCartState extends State<MyCart> {
                           width:120,
                           child:
                           GradientText(
-                            '200.790.000',
+                            sumtotal(data).toString(),
                             style: Theme.of(context).textTheme.headline6,
                             gradient: LinearGradient(colors: [
                               Colors.deepOrange.shade500,
@@ -379,8 +427,8 @@ class _MyCartState extends State<MyCart> {
                 ],
 
               ),
-            ) ),),
-    ));
+            ) ,),
+    );
   }
 
 }
@@ -409,3 +457,4 @@ class GradientText extends StatelessWidget {
 
 
 }
+

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:store_app/model/cart_model.dart';
+import 'package:store_app/model/Cart_Model.dart';
+
 
 class ProceedCheckout extends StatelessWidget {
   ProceedCheckout({Key? key}) : super(key: key);

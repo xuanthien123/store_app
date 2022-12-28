@@ -24,7 +24,7 @@ class SearchProductProvider extends ChangeNotifier {
       sortProductFromHighToLow();
     }
     notifyListeners();
-    print(2);
+
     return 1;
   }
 
@@ -43,7 +43,7 @@ class SearchProductProvider extends ChangeNotifier {
       }
     }
     list = temp;
-    print(3);
+
   }
 
   int mySortComparisonAToZ(ProductModel a, ProductModel b) {

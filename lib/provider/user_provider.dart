@@ -16,7 +16,7 @@ class UserProvider extends ChangeNotifier {
     var response = await client.post(Uri.parse(apiURL),headers: {
       'Content-Type': 'application/json',
     }, body: jsonEncode(queryParameters));
-    print(response.body);
+
     if(response.statusCode == 200){
 
       var jsonObject = jsonDecode(response.body);

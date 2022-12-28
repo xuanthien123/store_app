@@ -33,14 +33,14 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    print(1);
+
     final themeProvider =
     Provider.of<ThemeProvider>(context, listen: false); // get the provider, listen false is necessary cause is in a function
     _tabIconIndexSelected = themeProvider.idTheme;
     var productProvider = Provider.of<ProductProvider>(context);
     if(setBranch == true){
       productProvider.getListBrand("All", "");
-      print("1");
+
       setBranch = false;
     }
 

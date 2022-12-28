@@ -30,16 +30,16 @@ class _SearchProductState extends State<SearchProduct> {
   }
   @override
   Widget build(BuildContext context) {
-    print(4);
+
     var productProvider = Provider.of<SearchProductProvider>(context);
     if(setBranch == true){
       productProvider.getListBrand(dropdownBrandValue, _search.text, dropdownSoftValue);
-      print("1");
+
       setBranch = false;
     }
     list1 = productProvider.list;
     List<Container> listSearchProduct = GetGridViewProduct.getGrid(context, list1);
-    print(5);
+
     return Scaffold(
       body: SafeArea(
         child: Container(

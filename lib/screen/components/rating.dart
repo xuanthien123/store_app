@@ -67,7 +67,7 @@ class Rating extends StatelessWidget {
                           size: 2,
                         ),
                         onRatingUpdate: (rating) {
-                          print(rating);
+
                         },
                       ),
                     ],

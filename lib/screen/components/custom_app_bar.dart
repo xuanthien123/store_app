@@ -34,10 +34,7 @@ class CustomAppBar extends StatelessWidget {
                   padding: EdgeInsets.zero,
                 ),
                 onPressed: () => Navigator.pop(context),
-                child: SvgPicture.asset(
-                  "assets/icons/Back ICon.svg",
-                  height: 15,
-                ),
+                child:const Icon(Icons.arrow_back_outlined),
               ),
             ),
             Spacer(),

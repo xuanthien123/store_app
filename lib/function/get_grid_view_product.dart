@@ -80,7 +80,7 @@ class GetGridViewProduct {
                               color: Colors.amber,
                             ),
                             onRatingUpdate: (rating) {
-                              print(rating);
+
                             },
                             itemSize: 17,
 
@@ -155,7 +155,7 @@ class GetGridViewProduct {
                               color: Colors.amber,
                             ),
                             onRatingUpdate: (rating) {
-                              print(rating);
+
                             },
                             itemSize: 17,
 
@@ -240,7 +240,7 @@ class GetGridViewProduct {
                               color: Colors.amber,
                             ),
                             onRatingUpdate: (rating) {
-                              print(rating);
+
                             },
                             itemSize: 17,
 
@@ -336,7 +336,7 @@ class GetGridViewProduct {
                             color: Colors.amber,
                           ),
                           onRatingUpdate: (rating) {
-                            print(rating);
+
                           },
                           itemSize: 17,
 

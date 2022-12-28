@@ -73,7 +73,7 @@ class _CommentState extends State<Comment> {
                 },
               );
           }
-            print(isVisible);
+
     },
           child:
               Column(
@@ -143,7 +143,7 @@ Visibility(
             color: Colors.amber,
           ),
           onRatingUpdate: (rating) {
-            print(rating);
+
           },
         ), const SizedBox(
           height: 15.0,),
@@ -230,8 +230,8 @@ Visibility(
                   child:  CircleAvatar(
 
                     radius: 48,
-                    // Image radius
-                    backgroundImage: AssetImage('./assets/images/image_not_found.png'),
+                    // Image radiusAssetImage("assets/images/store_1.png")
+                    backgroundImage: AssetImage('assets/images/image_not_found.png'),
                   ),
                 ),
                 SizedBox(  width: 10.0,

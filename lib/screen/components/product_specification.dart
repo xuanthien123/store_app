@@ -1,9 +1,11 @@
 import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart';
+import 'package:provider/provider.dart';
 import '../../components/default_button.dart';
 import '../../components/rounded_icon_btn.dart';
 import '../../model/detailProduct_Model.dart';
+import '../../provider/user_provider.dart';
 import '../../screen/components/top_rounded_container.dart';
 import '../spash/constants.dart';
 import '../spash/size_config.dart';
@@ -23,9 +25,10 @@ bool isSelectedForColor=true;
 List<DetailProduct> detailvar=[];
 int selectedProduct=0;
 class _productspecificationState extends State<productspecification> {
+
   @override
   Widget build(BuildContext context) {
-
+    var userProvider = Provider.of<UserProvider>(context);
     // Now this is fixed and only for demo
     return
       Padding(padding:
@@ -68,7 +71,7 @@ class _productspecificationState extends State<productspecification> {
                   child: DefaultButton(
                     text:    widget.deitailProductForSpecification[0].Price,
                     press: () {
-                      AddToCart(context);
+                      AddToCart(context,userProvider.user.idUser!);
                     },
                   ),
 
@@ -78,8 +81,11 @@ class _productspecificationState extends State<productspecification> {
           )
       );
   }
-  Future<void> AddToCart (BuildContext context)  async {
+  Future<void> AddToCart (BuildContext context,int id)  async {
     try{
+      print(id);
+      print(selectedProduct);
+      print(number);
       if(selectedProduct==0){
         selectedProduct=widget.deitailProductForSpecification[0].IDDetailproduct!;
       }
@@ -87,20 +93,20 @@ class _productspecificationState extends State<productspecification> {
           Uri.parse('https://flutterserverdemo20221204094255.azurewebsites.net/api/Cart/createcart'),
           headers:{'Content-Type': 'application/json'},
           body:jsonEncode({
-
             "idDetailProduct":selectedProduct,
             "quantity": number,
-            "idUser":  widget.IDUser
+            "idUser":  id,
           },)
       );
       if(response.statusCode == 200){
         var data = jsonDecode(response.body.toString());
-        print('successfully');
+        print(data.toString()+"alo alo");
+
       }else {
-        print('failed');
+
       }
     }catch(e){
-      print(e.toString());
+
     }
   }
   GestureDetector buildContainerspecification(index) {
